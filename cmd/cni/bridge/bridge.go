@@ -250,8 +250,8 @@ func ensureBridge(brName string, mtu int, promiscMode, vlanFiltering bool) (*net
 	return br, nil
 }
 
-func ensureVlanInterface(br *netlink.Bridge, vlanID int) (netlink.Link, error) {
-	name := fmt.Sprintf("%s.%d", br.Name, vlanID)
+func ensureVlanInterface(br *netlink.Bridge, vlanId int) (netlink.Link, error) {
+	name := fmt.Sprintf("%s.%d", br.Name, vlanId)
 
 	brGatewayVeth, err := netlink.LinkByName(name)
 	if err != nil {
@@ -264,7 +264,7 @@ func ensureVlanInterface(br *netlink.Bridge, vlanID int) (netlink.Link, error) {
 			return nil, fmt.Errorf("faild to find host namespace: %v", err)
 		}
 
-		_, brGatewayIface, err := setupVeth(hostNS, br, name, br.MTU, false, vlanID)
+		_, brGatewayIface, err := setupVeth(hostNS, br, name, br.MTU, false, vlanId)
 		if err != nil {
 			return nil, fmt.Errorf("faild to create vlan gateway %q: %v", name, err)
 		}
@@ -278,7 +278,7 @@ func ensureVlanInterface(br *netlink.Bridge, vlanID int) (netlink.Link, error) {
 	return brGatewayVeth, nil
 }
 
-func setupVeth(netns ns.NetNS, br *netlink.Bridge, ifName string, mtu int, hairpinMode bool, vlanID int) (*current.Interface, *current.Interface, error) {
+func setupVeth(netns ns.NetNS, br *netlink.Bridge, ifName string, mtu int, hairpinMode bool, vlanId int) (*current.Interface, *current.Interface, error) {
 	contIface := &current.Interface{}
 	hostIface := &current.Interface{}
 
@@ -316,8 +316,8 @@ func setupVeth(netns ns.NetNS, br *netlink.Bridge, ifName string, mtu int, hairp
 	}
 
 	// 默认vlanid是1，因此不用进行额外操作
-	if vlanID != 0 && vlanID != 1 {
-		err = netlink.BridgeVlanAdd(hostVeth, uint16(vlanID), true, true, false, true)
+	if vlanId != 0 && vlanId != 1 {
+		err = netlink.BridgeVlanAdd(hostVeth, uint16(vlanId), true, true, false, true)
 		if err != nil {
 			return nil, nil, fmt.Errorf("failed to setup vlan tag on interface %q: %v", hostIface.Name, err)
 		}
@@ -327,7 +327,7 @@ func setupVeth(netns ns.NetNS, br *netlink.Bridge, ifName string, mtu int, hairp
 			return nil, nil, fmt.Errorf("failed to lookup bond0: %v", err)
 		}
 		// 配置bond0的vlanid
-		err = netlink.BridgeVlanAdd(bondVeth, uint16(vlanID), false, false, false, true)
+		err = netlink.BridgeVlanAdd(bondVeth, uint16(vlanId), false, false, false, true)
 		if err != nil {
 			return nil, nil, fmt.Errorf("failed to setup vlan tag on interface %q: %v", hostIface.Name, err)
 		}

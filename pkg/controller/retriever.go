@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+
 	"github.com/harmonycloud/bifrost/pkg/allocator"
 	"github.com/harmonycloud/bifrost/pkg/types"
 	"go.etcd.io/etcd/clientv3"
@@ -89,7 +90,7 @@ func (r *Retriever) RetrieveFixedIP() {
 }
 
 func (r *Retriever) getPodList() ([]types.PodNetwork, error) {
-	resp, err := r.cli.Get(context.TODO(), types.PodKeyPrefix, clientv3.WithPrefix())
+	resp, err := r.cli.Get(context.TODO(), types.Pod_Key_Prefix, clientv3.WithPrefix())
 
 	var keyList []types.PodNetwork
 

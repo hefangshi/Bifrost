@@ -3,6 +3,7 @@ package main
 import (
 	"flag"
 	"fmt"
+
 	"github.com/ant0ine/go-json-rest/rest"
 
 	"github.com/harmonycloud/bifrost/pkg/controller"
@@ -185,7 +186,7 @@ func CreateIPPool(w rest.ResponseWriter, r *rest.Request) {
 		rest.Error(w, " Gateway required", 400)
 		return
 	}
-	if nsPool.VlanID < 0 || nsPool.VlanID > 4094 {
+	if nsPool.VlanId < 0 || nsPool.VlanId > 4094 {
 		rest.Error(w, " VlanId out of range", 400)
 		return
 	}
